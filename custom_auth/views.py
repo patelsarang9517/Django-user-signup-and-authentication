@@ -7,6 +7,8 @@ from django.contrib.auth import login, authenticate
 from django.http import HttpResponseRedirect
 from django.conf import settings
 from django.contrib.auth.models import User
+from django.contrib.auth.mixins import LoginRequiredMixin
+
 
 # Get redirect url from settings file or else redirect to admin page.
 login_redirect_url = settings.LOGIN_REDIRECT_URL or 'admin'
@@ -72,3 +74,15 @@ class Signup(View):
         except Exception:
             error = {'general_error': 'Cannot create user at the moment..'}
             return render(request, 'registration/signup.html', {'errors': error, 'form': form})
+
+
+class Profile(LoginRequiredMixin, View):
+
+    def get(self, request):
+        return render(request, 'registration/profile.html')
+
+
+class Logout(View):
+
+    def post(self, request):
+        return render(request, 'registration/profile.html')
