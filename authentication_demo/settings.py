@@ -83,6 +83,21 @@ DATABASES = {
     }
 }
 
+# Email Backend
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+# Host for sending e-mail.
+EMAIL_HOST = 'smtp.gmail.com'
+
+# Port for sending e-mail.
+EMAIL_PORT = 25
+
+# Optional SMTP authentication information for EMAIL_HOST.
+EMAIL_HOST_USER = 'admin@example.com'  # Set original email
+EMAIL_HOST_PASSWORD = 'admin'  # Set original password
+EMAIL_USE_TLS = True
+FROM_EMAIL = 'admin@example.com'  # Set original email
+
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
@@ -123,5 +138,5 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 
-LOGIN_REDIRECT_URL = 'profile'
+LOGIN_REDIRECT_URL = '/profile'
 LOGIN_URL = "/"
