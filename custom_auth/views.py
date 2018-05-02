@@ -2,7 +2,7 @@
 
 from django.views import View
 from django.shortcuts import render
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, authenticate, logout
 from django.shortcuts import redirect
 from django.http import HttpResponseRedirect
 from django.conf import settings
@@ -197,4 +197,24 @@ class SetPassword(View):
         user.save()
         token_obj[0].used = True
         token_obj[0].save()
-        return HttpResponseRedirect(reverse('login'), {'errors': {'general_error': 'Password changed successfully.'}})
+        return HttpResponseRedirect(reverse('login'))
+
+
+class ChangePassword(LoginRequiredMixin, View):
+
+    def get(self, request):
+        form = ConfirmPasswordForm()
+        return render(request, 'registration/change_password.html', {'form': form})
+
+    def post(self, request):
+        form = ConfirmPasswordForm(request.POST)
+        if not form.is_valid():
+            return render(request, 'registration/change_password.html', {'form': form, 'errors': form.errors})
+        password_1 = form.cleaned_data.get('password_1')
+        password_2 = form.cleaned_data.get('password_2')
+        if password_1 != password_2:
+            return render(request, 'registration/change_password.html', {'form': form, 'errors': {'general_error': "Passwords don't match"}})
+        request.user.set_password(password_1)
+        request.user.save()
+        logout(request)
+        return HttpResponseRedirect(reverse('login'))
