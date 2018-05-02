@@ -140,3 +140,6 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 
 LOGIN_REDIRECT_URL = '/profile'
 LOGIN_URL = "/"
+
+
+CELERY_BROKER_URL = 'amqp://localhost'
