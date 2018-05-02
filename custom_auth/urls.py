@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from django.conf.urls import url
-from .views import Login, Signup, Profile, ResetPassword, SetPassword
+from .views import Login, Signup, Profile, ResetPassword, SetPassword, ChangePassword
 from django.contrib.auth.views import logout
 
 urlpatterns = [
@@ -11,4 +11,5 @@ urlpatterns = [
     url(r'^logout/$', logout, {'next_page': '/'}, name='logout'),
     url(r'^reset_password/$', ResetPassword.as_view(), name='reset_password'),
     url(r'^set_password/$', SetPassword.as_view(), name='set_password'),
+    url(r'^change_password/$', ChangePassword.as_view(), name='change_password'),
 ]
