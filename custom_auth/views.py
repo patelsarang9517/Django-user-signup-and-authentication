@@ -10,7 +10,6 @@ from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.urlresolvers import reverse
 from django.template.loader import render_to_string
-from django.core.mail import send_mail
 from django.http import Http404
 from .forms import LoginForm, SignupForm, ResetPasswordForm, ConfirmPasswordForm
 from .models import PasswordResetTokens
@@ -18,6 +17,7 @@ import pyotp
 import uuid
 from datetime import datetime
 import pytz
+from .tasks import send_async_email
 
 
 # Get redirect url from settings file or else redirect to admin page.
@@ -81,16 +81,7 @@ class Signup(View):
                 user.email = email
                 user.profile.mobile = mobile
                 user.save()
-                try:
-                    send_mail(
-                        'Welcome Aboard',
-                        'Welcome aboard. Thanks for joining the A team.',
-                        settings.FROM_EMAIL,
-                        [user[0].email],
-                        fail_silently=False
-                    )
-                except Exception:
-                    print 'Cannot send email to users. Something is wrong'
+                send_async_email.delay('Welcome Aboard', 'Welcome aboard. Thanks for joining the A team.', settings.FROM_EMAIL, [user[0].email])
                 return redirect(login_redirect_url)
             else:
                 error = {'general_error': 'User already registered.'}
@@ -137,16 +128,7 @@ class ResetPassword(View):
             'url': url
         }
         )
-        try:
-            send_mail(
-                'Password Reset',
-                message,
-                settings.FROM_EMAIL,
-                [user[0].email],
-                fail_silently=False
-            )
-        except Exception:
-            print 'Cannot send email to users. Something is wrong'
+        send_async_email.delay('Password Reset', message, settings.FROM_EMAIL, [user[0].email])
         return render(request, 'registration/reset_email_sent.html')
 
     @staticmethod
