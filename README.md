@@ -42,6 +42,11 @@ python manage.py runserver 0:8000
 ```
 http://localhost:8000
 ```
+8) Following are the Admin credentials
+```
+username: admin
+password: admin
+```
 
 ## Deployment
 This app is not deployment ready. It needs modifications before deployment.
