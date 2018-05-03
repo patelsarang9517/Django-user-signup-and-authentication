@@ -97,8 +97,9 @@ class Signup(View):
                 user.email = email
                 user.profile.mobile = mobile
                 user.save()
+                login(request, user)
                 send_async_email.delay(
-                    'Welcome Aboard', 'Welcome aboard. Thanks for joining the A team.', settings.FROM_EMAIL, [user[0].email])
+                    'Welcome Aboard', 'Welcome aboard. Thanks for joining the A team.', settings.FROM_EMAIL, [user.email])
                 return redirect(login_redirect_url)
             else:
                 error = {'general_error': 'User already registered.'}
