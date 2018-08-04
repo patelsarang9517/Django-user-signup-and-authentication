@@ -95,8 +95,8 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 25
 
 # Optional SMTP authentication information for EMAIL_HOST.
-EMAIL_HOST_USER = 'admin@example.com'  # Set original email
-EMAIL_HOST_PASSWORD = 'admin'  # Set original password
+EMAIL_HOST_USER = 'hiren@auberginesolutions.com'  # Set original email
+EMAIL_HOST_PASSWORD = ''  # Set original password
 EMAIL_USE_TLS = True
 FROM_EMAIL = 'admin@example.com'  # Set original email
 

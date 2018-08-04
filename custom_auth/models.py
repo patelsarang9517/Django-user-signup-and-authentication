@@ -40,3 +40,8 @@ def create_user_profile(sender, instance, created, **kwargs):
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
     instance.profile.save()
+
+class ImageUrl(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    image_url = models.URLField(max_length=300)
+    short_image_url = models.URLField(max_length=300)

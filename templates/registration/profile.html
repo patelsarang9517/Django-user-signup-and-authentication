@@ -7,10 +7,49 @@
 <div class="limiter">
     <div class="container-login100">
       <div class="wrap-login100">
-        <form class="login100-form" method="post" action="{% url 'logout' %}">
-        <span class="login100-form-title p-b-26">
+      <span class="login100-form-title p-b-26">
             Welcome {{user.username}}
-          </span>
+      </span>
+      <!-- <form class="login100-form" method="post" action="{% url 'profile' %}">
+        {% csrf_token %}
+        <div class="wrap-input100">
+            {{form.image_url}}
+            <span class="focus-input100" data-placeholder="Image Url"></span>
+        </div>
+        <div class="login100-form-bgbtn"></div>
+        
+        <div class="container-login100-form-btn">
+            <div class="wrap-login100-form-btn">
+              <div class="login100-form-bgbtn"></div>
+              <button class="login100-form-btn" type="submit">
+                Save Url
+              </button>
+            </div>
+          </div>
+      </div>
+      </form> -->
+      <form class="login100-form" method="post" action="{% url 'profile' %}">
+        {% csrf_token %}
+        <div class="wrap-input100">
+            {{form.image_url}}
+            <span class="focus-input100" data-placeholder="Image Url"></span>
+        </div>
+        {%if 'image_url' in errors%}
+            <div class='alert alert-warning'>{{errors.image_url}}</div>
+          {% endif %}
+        {%if success_msg%}
+            <div class='alert alert-success'>{{success_msg}}</div>
+          {% endif %}
+          <div class="container-login100-form-btn">
+            <div class="wrap-login100-form-btn">
+              <div class="login100-form-bgbtn"></div>
+              <button class="login100-form-btn" type="submit">
+                Save Url
+              </button>
+            </div>
+          </div>
+        </form>
+        <form class="login100-form" method="post" action="{% url 'logout' %}">
         {% csrf_token %}
           <div class="container-login100-form-btn">
             <div class="wrap-login100-form-btn">

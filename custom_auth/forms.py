@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from django import forms
+from .models import ImageUrl
 
 
 class LoginForm(forms.Form):
@@ -39,3 +40,6 @@ class ConfirmPasswordForm(forms.Form):
         attrs={'class': 'input100'}))
     password_2 = forms.CharField(max_length=30, widget=forms.PasswordInput(
         attrs={'class': 'input100'}))
+
+class ImageUrlForm(forms.Form):
+    image_url = forms.URLField(label='Image URL', required=True, widget=forms.TextInput(attrs={'class': 'input100'}))

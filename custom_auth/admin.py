@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from django.contrib import admin
-from .models import Profile, PasswordResetTokens
+from .models import Profile, PasswordResetTokens, ImageUrl
 
 
 class ProfileAdmin(admin.ModelAdmin):
@@ -16,4 +16,5 @@ class PasswordResetTokensAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Profile, ProfileAdmin)
+admin.site.register(ImageUrl)
 admin.site.register(PasswordResetTokens, PasswordResetTokensAdmin)

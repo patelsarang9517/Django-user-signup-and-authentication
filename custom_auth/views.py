@@ -11,8 +11,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.urlresolvers import reverse
 from django.template.loader import render_to_string
 from django.http import Http404
-from .forms import LoginForm, SignupForm, ResetPasswordForm, ConfirmPasswordForm
-from .models import PasswordResetTokens
+from .forms import LoginForm, SignupForm, ResetPasswordForm, ConfirmPasswordForm, ImageUrlForm
+from .models import PasswordResetTokens, ImageUrl
 import uuid
 from datetime import datetime
 import pytz
@@ -113,10 +113,22 @@ class Profile(LoginRequiredMixin, View):
 
     def get(self, request):
         """
-        Return Profile template
+        Return Profile template with field to enter url
         """
-        return render(request, 'registration/profile.html')
+        form = ImageUrlForm()
+        return render(request, 'registration/profile.html', {"form":form})
 
+    def post(self, request):
+        """
+        Save Image url
+        """
+        form = ImageUrlForm(request.POST)
+        if form.is_valid():
+            token = request.POST.get('image_url')
+            # I didn't understand what compressed URL is. So i stored the same image url in the compressed field as well.
+            ImageUrl.objects.create(image_url=form.cleaned_data.get('image_url'), user=request.user, short_image_url=form.cleaned_data.get('image_url'))
+            return render(request, 'registration/profile.html', {"success_msg":"The url was stored successfully."})
+        return render(request, 'registration/profile.html', {'form': ImageUrlForm(), 'errors': form.errors})
 
 class Logout(View):
 
@@ -254,7 +266,11 @@ def create_user(request):
     if request.method == 'POST':
         serialized = UserSerializer(data=request.data)
         if serialized.is_valid():
-            serialized.save()
+            user = serialized.save()
+            user.is_active=True
+            user.save()
+            send_async_email.delay(
+                    'Welcome Aboard', 'Welcome aboard. Thanks for joining the A team.', settings.FROM_EMAIL, [user.email])
             api_return_response['status'] = 'success'
             api_return_response['data'] = serialized.data
             return Response(api_return_response, status=status.HTTP_201_CREATED)
